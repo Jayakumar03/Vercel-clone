@@ -12,8 +12,8 @@ const uploadFileToAws = async (folderPath: string) => {
   // Create a new instance of the S3 class
   const s3 = new AWS.S3({
     region: "ap-south-1",
-    accessKeyId: "AKIATKWQW6C5X7AMMA7T",
-    secretAccessKey: "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",
+    accessKeyId: process.env.ACCESSKEY,
+    secretAccessKey: process.env.SECRETACCESSKEY,
   });
 
   const bucketDir = folderPath.slice(__dirname.length - 5);
