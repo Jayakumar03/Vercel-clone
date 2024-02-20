@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 const app = express();
 const generateUtil = require("./utils/generate");
 const getAllFiles = require("./utils/getAllFiles");
+const uploadFileToAws = require("./utils/uploadAws");
 const cors = require("cors");
 import path from "path";
 
@@ -16,8 +17,9 @@ app.post("/deploy", async (req: Request, res: Response, next: NextFunction) => {
   const repoUrl = req.body.repoUrl;
   const id = generateUtil();
   await simpleGit().clone(repoUrl, path.join(__dirname, `output/${id}`));
-  const files = getAllFiles(path.join(__dirname, `output/${id}`));
-  console.log(files);
+
+  // Upload to aws s3
+  await uploadFileToAws(path.join(__dirname, `output/${id}`));
 
   res.json({
     success: true,

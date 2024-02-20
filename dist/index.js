@@ -17,6 +17,7 @@ const express = require("express");
 const app = express();
 const generateUtil = require("./utils/generate");
 const getAllFiles = require("./utils/getAllFiles");
+const uploadFileToAws = require("./utils/uploadAws");
 const cors = require("cors");
 const path_1 = __importDefault(require("path"));
 app.use(cors());
@@ -26,8 +27,8 @@ app.post("/deploy", (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     const repoUrl = req.body.repoUrl;
     const id = generateUtil();
     yield simpleGit().clone(repoUrl, path_1.default.join(__dirname, `output/${id}`));
-    const files = getAllFiles(path_1.default.join(__dirname, `output/${id}`));
-    console.log(files);
+    // Upload to aws s3
+    yield uploadFileToAws(path_1.default.join(__dirname, `output/${id}`));
     res.json({
         success: true,
         id: id,
